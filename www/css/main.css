@@ -1,0 +1,252 @@
+@-webkit-keyframes flash {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+
+  25%, 75% {
+    opacity: .1;
+  }
+}
+
+sup {
+    font-weight: 400;
+    font-size: 60%;
+    position: absolute;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -3;
+    top: 0;
+    left: 0;
+}
+
+.ol-attribution,
+.ol-zoom {
+    display: none;
+}
+
+#location-marker {
+    width: 48px;
+    height: auto;
+}
+
+.fotorama__dot {
+    border: 1px solid #ccc;
+    background: #ccc;
+}
+
+.fotorama__nav__frame.fotorama__active .fotorama__dot {
+    background: #333;
+    border-color: #333;
+}
+
+.fotorama__nav--dots .fotorama__nav__frame {
+    width: 12px;
+}
+
+.sick {
+    opacity: .3;
+}
+
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    transition: opacity .2s ease-in-out;
+    -webkit-outline: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+body {
+    -webkit-touch-callout: none;
+    -webkit-text-size-adjust: none;
+    -webkit-user-select: none;
+    font-family: -apple-system-font, 'Helvetica Neue', sans-serif;
+    line-height: 1.4em;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    position: fixed;
+    -webkit-font-smoothing: antialiased;
+    -webkit-font-feature-settings: "mnum";
+}
+
+canvas {
+    -webkit-filter: saturate(0.6);
+}
+
+.dist h1, .safety button, .dist button, .start.dist *, .dist .share path {
+    color: #ff4e00;
+    stroke: #ff4e00;
+}
+
+.time h1, .info button, .time button, .start.time *, .time .share path {
+    color: #7ed321;
+    stroke: #7ed321;
+}
+
+.route.dist button path {
+    fill: #ff4e00;
+}
+
+.route.time button path {
+    fill: #7ed321;
+}
+
+#kntdr {
+    position: fixed;
+    -webkit-backdrop-filter: blur(30px);
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 3;
+    width: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    transition: height .1s ease-out;
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 0.5px solid rgba(0, 0, 0, .3);
+}
+
+#blur {
+    transition: -webkit-filter .2s ease-out;
+}
+
+.short {
+    height: 260px;
+}
+
+.long {
+    height: 330px;
+    transition: height .1s ease-out;
+}
+
+.inner {
+    display: none;
+    position: fixed;
+    z-index: 99999999999;
+    width: 100%;
+    top: 0;
+    left: 0;
+    margin-top: 9px;
+}
+
+.notice {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    text-align: center;
+    color: #fff;
+    background: rgba(0, 0, 0, .8);
+}
+
+.safety figure {
+    font-weight: 100;
+    font-size: 108px;
+    margin: 100px 0 60px;
+}
+
+.info figure {
+    font-weight: 100;
+    font-size: 148px;
+    margin: 100px 0 70px;
+}
+
+.notice p {
+    margin: 0 auto 5px;
+    max-width: 320px;
+}
+
+.notice h2 {
+    margin-bottom: .5em;
+    line-height: 1.2em;
+}
+
+.notice button {
+    -webkit-animation: flash 4s infinite linear;
+}
+
+.notice-shown {
+    -webkit-filter: blur(10px);
+}
+
+.notice-shown .notice {
+    display: block;
+}
+
+.fotorama {
+    height: 100%;
+    width: 100%;
+}
+
+.take-three .col {
+    display: inline-block;
+    width: 30%;
+    margin-top: 20px;
+}
+
+h1 {
+    font-weight: 100;
+    font-size: 90px;
+    margin: 10px 0 0;
+    line-height: 90px;
+}
+
+.item h1 {
+    font-size: 80px;
+    line-height: 80px;
+}
+
+h2 {
+    font-size: 34px;
+    line-height: 34px;
+    font-weight: 300;
+    margin: 0;
+}
+
+h3, button {
+    font-weight: 400;
+    font-size: 18px;
+    margin: 0 0 0.3em 0;
+}
+
+h4 {
+    font-weight: 500;
+    font-size: 11px;
+    margin: 10px 0 20px 0;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.col h4 {
+    margin: 7px 0;
+}
+
+button {
+    -webkit-appearance: none;
+    font-family: -apple-system-font, 'Helvetica Neue', sans-serif;
+    background: 0;
+    border: 0;
+    font-weight: 500;
+    padding: 20px 80px 40px;
+    cursor: pointer;
+}
+
+button.share {
+    position: absolute;
+    right: 0;
+    padding: 0;
+    bottom: 32px;
+    right: 5%;
+}

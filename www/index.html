@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="chrome=1">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="apple-touch-icon" href="/icon.png">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+
+	<!--script type="text/javascript" src="cordova.js"></script-->
+
+	<link rel="stylesheet" href="css/fotorama.css" type="text/css">
+	<link rel="stylesheet" href="css/main.css" type="text/css">
+	<title>Контадор</title>
+</head>
+
+<body>
+	<div class="safety notice">
+		<figure>!</figure>
+		<h2>Предупреждение безопасности</h2>
+		<p>Уделяйте особое внимание обстановке на дорогах. Маршрут может оказаться неточным, на нём могут отсутствовать тротуары и пешеходные переходы.</p>
+		<button class="emerge" data-hold="400" data-duration="700">Продолжить</button>
+	</div>
+	<div id="blur" class="notice-shown">
+		<div id="kntdr" class="short">
+
+			<div class="inner list emerge" data-spin="true">
+				<div class="fotorama" id="routes" data-auto="false" data-arrows="false" data-click="false" data-shadows="false" data-width="100%" data-height="210">
+
+				</div>
+			</div>
+
+			<div class="inner start">
+
+				<h4>До начала маршрута</h4>
+				<h1 id="left">−−</h1>
+
+				<button><a onclick="route()">Остановить</a></button>
+			</div>
+
+			<div class="inner route">
+				<h4 id="item2">На дистанцию</h4>
+				<h1>0,0 км</h1>
+
+				<div class="take-three">
+					<div class="col">
+						<h2 id="speed">0,0</h2>
+						<h4>км/ч</h4>
+					</div>
+					<div class="col">
+<<<<<<< HEAD
+						<h2>5,1</h2>
+=======
+						<h2 id="finish">0,0</h2>
+>>>>>>> origin/master
+						<h4>Осталось</h4>
+					</div>
+					<div class="col">
+						<h2 id="timer">0:00</h2>
+						<h4>Прошло</h4>
+					</div>
+				</div>
+
+				<button id="stopTimer">
+					<svg width="20px" height="28px" viewBox="0 0 27 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+						<defs></defs>
+						<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+							<g transform="translate(-303.000000, -545.000000)">
+								<g transform="translate(1.000000, 58.000000)">
+									<path d="M302.025395,487.872 L302.025395,525 L310.189395,525 L310.189395,487.872 L302.025395,487.872 Z M320.470515,487.872 L320.470515,525 L328.634515,525 L328.634515,487.872 L320.470515,487.872 Z"></path>
+								</g>
+							</g>
+						</g>
+					</svg>
+				</button>
+				<button id="startTimer" style="display:none">
+					<svg width="28px" height="28px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+					    <defs></defs>
+					    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+					        <g transform="translate(0.000000, -1.000000)" fill="#D8D8D8">
+					            <path d="M10,1 L20,21 L0,21 L10,1 Z"  transform="translate(10.000000, 11.000000) rotate(90.000000) translate(-10.000000, -11.000000) "></path>
+					        </g>
+					    </g>
+					</svg>
+				</button>
+			</div>
+
+			<div class="inner finish">
+				<h4>На дистанцию</h4>
+
+				<h1>Ура</h1>
+
+				<div class="take-three">
+					<div class="col">
+						<h2>26</h2>
+						<h4>км</h4>
+					</div>
+					<div class="col">
+						<h2>0:08</h2>
+						<h4>время</h4>
+					</div>
+				</div>
+
+				<button onclick="stop()">Закончить</button>
+
+				<button class="share">
+					<svg width="22px" height="36px" viewBox="0 0 36 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+						<defs></defs>
+						<g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+							<g id="1432697885_download" sketch:type="MSLayerGroup" transform="translate(-7.000000, 0.000000)">
+								<path d="M33,2 L25,10 L17,2" id="Shape" stroke-width="2" sketch:type="MSShapeGroup" transform="translate(25.000000, 6.000000) scale(-1, -1) translate(-25.000000, -6.000000) "></path>
+								<path d="M25,2 L25,33.668" id="Shape" stroke-width="2" sketch:type="MSShapeGroup"></path>
+								<rect id="Rectangle-path" sketch:type="MSShapeGroup" x="0" y="0" width="50" height="50"></rect>
+								<path d="M17,17 L8,17 L8,49 L42,49 L42,17 L33,17" id="Shape" stroke-width="2" sketch:type="MSShapeGroup"></path>
+							</g>
+						</g>
+					</svg>
+				</button>
+			</div>
+
+		</div>
+
+		<img id="location-marker" />
+		<div id="map"></div>
+	</div>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/fotorama.js"></script>
+	<script type="text/javascript" src="js/ol.js"></script>
+	<script type="text/javascript" src="js/emerge.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
+</body>
+</html>
+
+	</body>
+</html>

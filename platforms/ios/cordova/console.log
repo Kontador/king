@@ -1,0 +1,16 @@
+2015-06-21 03:14:48.857 Kontador[2808:456339] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/vanya/Library/Developer/CoreSimulator/Devices/C7C9F15E-38A4-4856-9F63-3350407978E4/data/Containers/Data/Application/73E6F008-6F26-43CC-AF61-BBB6572E012C/Library/Cookies/Cookies.binarycookies
+2015-06-21 03:14:49.175 Kontador[2808:456339] Apache Cordova native platform version 3.8.0 is starting.
+2015-06-21 03:14:49.176 Kontador[2808:456339] Multi-tasking -> Device: YES, App: YES
+2015-06-21 03:14:49.195 Kontador[2808:456339] Unlimited access to network resources
+2015-06-21 03:14:49.206 Kontador[2808:456339] 
+
+Started backup to iCloud! Please be careful.
+Your application might be rejected by Apple if you store too much data.
+For more information please read "iOS Data Storage Guidelines" at:
+https://developer.apple.com/icloud/documentation/data-storage/
+To disable web storage backup to iCloud, set the BackupWebStorage preference to "local" in the Cordova config.xml file
+
+2015-06-21 03:14:49.651 Kontador[2808:456339] [CDVTimer][socialsharing] 68.607986ms
+2015-06-21 03:14:49.651 Kontador[2808:456339] [CDVTimer][TotalPluginStartup] 68.786979ms
+2015-06-21 03:14:49.822 Kontador[2808:456339] Resetting plugins due to page load.
+2015-06-21 03:14:50.187 Kontador[2808:456339] Finished load of: file:///Users/vanya/Library/Developer/CoreSimulator/Devices/C7C9F15E-38A4-4856-9F63-3350407978E4/data/Containers/Bundle/Application/53A0CD7D-B88A-41A9-BB10-9882FDF119F1/Kontador.app/www/index.html

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="ru.kntdr.kntdr" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <preference name="Orientation" value="portrait" />
+    <preference name="Orientation" value="portrait" />
+    <preference name="DisallowOverscroll" value="true"/>
+    <preference name="HideKeyboardFormAccessoryBar" value="true"/>
+    <name>Kontador</name>
+    <description>
+        Bike tracker with routes.
+    </description>
+    <author email="vanya@kntdr.ru" href="http://kntdr.ru">
+        Vanya Klimenko, Phil Romanov
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+
+    <plugins>
+        <plugin name="org.apache.cordova.dialogs" />
+    </plugins>
+
+    <feature name="Notification">
+        <param name="ios-package" value="org.apache.cordova.dialogs.Notification" />
+    </feature>
+</widget>
