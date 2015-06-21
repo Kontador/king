@@ -34,6 +34,5 @@
     <content src="index.html" />
     <access origin="*" />
     <plugins>
-        <plugin name="org.apache.cordova.dialogs" />
     </plugins>
 </widget>

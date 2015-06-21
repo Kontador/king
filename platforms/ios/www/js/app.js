@@ -72,7 +72,7 @@ geolocation.on('change', function(evt) {
 	var speed    = geolocation.getSpeed() || 0; // global
 	var coords = positions.getCoordinates();
 
-	console.log('Уважаемый пользователь! Уведомляем о том, что на данный момент произошло изменение позиции! Спасибо за понимание!' + position);
+	console.log('Your coordinates are: ' + position);
 
 	// -----  Speed.
 	speedometer(speed);
@@ -275,7 +275,7 @@ function showRoutes(data){
 		console.log(i+1 + " route done");
 	}
 }
-
+// по клику на кнопку «Начать» вызывается функция start(), в которую передаётся в качестве первого аргумента тип маршрута и длина маршрута в качестве второго.
 // parse json and show one of the routes on the map.
 function getRoutes(data, id){
 	if(!id) id = 0; // route number.
@@ -428,8 +428,9 @@ $('.notice button').click(function() {
 	$('#blur').removeClass('notice-shown');
 });
 
-function start(routeKind) {
-	window.routeKind = routeKind;
+function start(params) {
+	var routeKind = params.css;
+	var routeLength = params.length;
 	$('.start').hide();
 	$('.list').hide();
 	$('.route').show();
@@ -454,7 +455,7 @@ function stop() {
 };
 heat();
 
-$('.start').click(route);
+// $('.start').click(route());
 
 $('.share').click(function() {
     window.plugins.socialsharing.share('Проехал 0 км за 1:03 не без помощи Контадора!', null, null, 'http://kntdr.ru')
