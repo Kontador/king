@@ -362,7 +362,7 @@ function addRoutes(coord) {
 		var style = new ol.style.Style({
 			stroke: new ol.style.Stroke({
 				width: 5,
-				color: 'rgba(255, 87, 0, 1.0)'
+				color: 'rgba(0, 165, 255, 1.0)'
 			}),
 		});
 		vectorLayerLineFirst = new ol.layer.Vector({
