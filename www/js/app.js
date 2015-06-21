@@ -362,7 +362,8 @@ function addRoutes(coord) {
 		var style = new ol.style.Style({
 			stroke: new ol.style.Stroke({
 				width: 5,
-				color: 'rgba(0, 165, 255, 1.0)'
+				color: 'rgba(0, 165, 255, 1.0)',
+
 			}),
 		});
 		vectorLayerLineFirst = new ol.layer.Vector({
@@ -372,6 +373,42 @@ function addRoutes(coord) {
 
 		map.addLayer(vectorLayerLineFirst);
 		countLineRoutes++;
+
+
+
+		// Add start/finish markers.
+		var vectorSource = new ol.source.Vector({
+			//create empty vector
+		});
+		var iconFeature = new ol.Feature({geometry: new  
+			ol.geom.Point(ol.proj.transform([73.3964, 61.254], 'EPSG:4326', 'EPSG:3857')),
+			name: 'Null Island ' + i,
+			population: 4000,
+			rainfall: 500
+		});
+		vectorSource.addFeature(iconFeature);
+
+		//create the style
+		var iconStyle = new ol.style.Style({
+			image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+				anchor: [0.5, 46],
+				anchorXUnits: 'fraction',
+				anchorYUnits: 'pixels',
+				opacity: 1,
+				scale: 0.9,
+				src: 'img/A.png'
+			}))
+		});
+
+
+
+		//add the feature vector to the layer vector, and apply a style to whole layer
+		var vectorLayer = new ol.layer.Vector({
+			source: vectorSource,
+			style: iconStyle
+		});
+
+		map.addLayer(vectorLayer);
 	}
 }
 function delRoutes() {
