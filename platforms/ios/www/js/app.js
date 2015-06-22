@@ -19,7 +19,7 @@ var map = new ol.Map({
 				minZoom: 12,
 				maxZoom: 18
 			}),
-		})
+		}),
 	],
 	target: 'map',
 	view: view,
@@ -178,7 +178,7 @@ function geolocate() {
 	map.render();
 	geolocation.setTracking(true); // Start position tracking
 }
-geolocate();
+//geolocate();
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -233,6 +233,7 @@ startTimer = function(){
 		$('h1, h4, h2').removeClass('sick');
 		$('#stopTimer').show();
 		$('#startTimer').hide();
+		$('#fail-finish').hide();
 }
 
 var stopTimer = function(){
@@ -240,6 +241,7 @@ var stopTimer = function(){
 	$('h1, h4, h2').addClass('sick');
 	$('#stopTimer').hide();
 	$('#startTimer').show();
+	$('#fail-finish').show();
 	clearInterval(tick);
 }
 
@@ -248,34 +250,6 @@ $("#startTimer").click(startTimer);
 
 //---------------------------------------------------------------------------------------------------------
 
-// parse json and show ALL routes
-function showRoutes(data){
-	for(var i=0; i < data.routes.length; i++){
-		var item = data.routes[i][i+1][0];
-
-		var kind = {
-			'dist': {
-				css: "dist",
-				header: "На дистанцию"
-			},
-			'time': {
-				css: "time",
-				header: "На время"
-			}
-		}
-		item.length = item.length.toString().slice(0, -1);
-		item.length = item.length.replace(".", ",");
-		$("#routes").append("\
-			<div class=\"item "+ kind[item.kind].css +"\">\
-				<h4>"+ kind[item.kind].header +"</h4>\
-				<h3 id=\"item1\">"+ item.name +"</h3>\
-				<h1>" + item.length +" км</h1>\
-			<button><a onclick=\"start('" + kind[item.kind].css + "')\">Начать</a></button>\
-			");
-		console.log(i+1 + " route done");
-	}
-}
-// по клику на кнопку «Начать» вызывается функция start(), в которую передаётся в качестве первого аргумента тип маршрута и длина маршрута в качестве второго.
 // parse json and show one of the routes on the map.
 function getRoutes(data, id){
 	if(!id) id = 0; // route number.
@@ -384,12 +358,57 @@ function addRoutes(coord) {
 		var vectorLineFirst = new ol.source.Vector({});
 		vectorLineFirst.addFeature(firstroutesF);
 
+
+		var style = new ol.style.Style({
+			stroke: new ol.style.Stroke({
+				width: 5,
+				color: 'rgba(0, 165, 255, 1.0)',
+
+			}),
+		});
 		vectorLayerLineFirst = new ol.layer.Vector({
-			source: vectorLineFirst
+			source: vectorLineFirst,
+			style: style
 		});
 
 		map.addLayer(vectorLayerLineFirst);
 		countLineRoutes++;
+
+
+
+		// Add start/finish markers.
+		var vectorSource = new ol.source.Vector({
+			//create empty vector
+		});
+		var iconFeature = new ol.Feature({geometry: new  
+			ol.geom.Point(ol.proj.transform([73.3964, 61.254], 'EPSG:4326', 'EPSG:3857')),
+			name: 'Null Island ' + i,
+			population: 4000,
+			rainfall: 500
+		});
+		vectorSource.addFeature(iconFeature);
+
+		//create the style
+		var iconStyle = new ol.style.Style({
+			image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+				anchor: [0.5, 46],
+				anchorXUnits: 'fraction',
+				anchorYUnits: 'pixels',
+				opacity: 1,
+				scale: 0.9,
+				src: 'img/A.png'
+			}))
+		});
+
+
+
+		//add the feature vector to the layer vector, and apply a style to whole layer
+		var vectorLayer = new ol.layer.Vector({
+			source: vectorSource,
+			style: iconStyle
+		});
+
+		map.addLayer(vectorLayer);
 	}
 }
 function delRoutes() {
@@ -428,31 +447,66 @@ $('.notice button').click(function() {
 	$('#blur').removeClass('notice-shown');
 });
 
+// parse json and show ALL routes
+function showRoutes(data){
+	for(var i=0; i < data.routes.length; i++){
+		var item = data.routes[i][i+1][0];
+
+		var kind = {
+			'dist': {
+				css: "dist",
+				header: "На дистанцию"
+			},
+			'time': {
+				css: "time",
+				header: "На время"
+			}
+		}
+		var lengthNumber = item.length;
+
+		item.length = item.length.toString().slice(0, -1);
+		item.length = item.length.replace(".", ",");
+		item.css    = kind[item.kind].css;
+		item.header = kind[item.kind].header;
+
+		$("#routes").append("\
+			<div class=\"item "+ item.css +"\">\
+				<h4>"+ item.header +"</h4>\
+				<h3 id=\"item1\">"+ item.name +"</h3>\
+				<h1>" + item.length +" км</h1>\
+			<button><a onclick=\"start('"+item.css+", "+lengthNumber+", " +item.name+ "')\">Начать</a></button>\
+			</div>\
+		");
+	}
+}
+// по клику на кнопку «Начать» вызывается функция start(), в которую передаётся в качестве первого аргумента тип маршрута и длина маршрута в качестве второго.
+
 function start(params) {
-	var routeKind = params.css;
-	var routeLength = params.length;
-	$('.start').hide();
-	$('.list').hide();
-	$('.route').show();
-	$('.route').addClass(routeKind);
+	var params = params.split(",");
+	var css = params[0], length = params[1], name = params[2];
+
+	length = length.toString().slice(0, -1).replace(".", ",") + ' км';
+	$("#global_left").html(length);
+	$("#global_name").html(name);
+	$('.route').show().addClass(css);
+
+	$('.start, .list').hide();
 	$('#kntdr').attr('class', 'long');
 	startTimer();
 };
 
-function finish() {
+function finish(type) {
+	// type = { 1: 'success', 0: 'fail'}
+	if(!type) type = 1;
+	if(type == 0){
+		alert("Сдулся слабак");
+	}
 	$('.route').hide();
 	$('.finish').show();
 	$('.finish').addClass(routeKind);
-	$('h1, h2, h4').removeClass(sick);
+	$('h1, h2, h4').removeClass('sick');
 };
 
-function stop() {
-	$('.finish').hide;
-	$('.route').hide;
-	$('.start').hide;
-	heat();
-
-};
 heat();
 
 // $('.start').click(route());
