@@ -178,7 +178,7 @@ function geolocate() {
 	map.render();
 	geolocation.setTracking(true); // Start position tracking
 }
-//geolocate();
+geolocate();
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -259,90 +259,124 @@ function getRoutes(data, id){
 	var routesArr = new Array();
 	for(var e=0; e < item.latlngs.length; e++){
 		// from user to start position
-		if(e == 0){
-			var firstCoordinate = [item.latlngs[e].lat, item.latlngs[e].lng];
-			setTimeout(function(){
-				distanceBeetween(firstCoordinate);
-			}, 2000);
-		}
-		// from user to finish position
-		else if(e == item.latlngs.length - 1){
-			var lastCoordinate = [item.latlngs[e].lat, item.latlngs[e].lng];
-			setTimeout(function(){
-				distanceBeetween(lastCoordinate, 'finish');
-			}, 3000);
-		}
+		// if(e == 0){
+		// 	var firstCoordinate = [item.latlngs[e].lat, item.latlngs[e].lng];
+		// 	setTimeout(function(){
+		// 		distanceBeetween(firstCoordinate);
+		// 	}, 2000);
+		// }
+		// // from user to finish position
+		// else if(e == item.latlngs.length - 1){
+		// 	var lastCoordinate = [item.latlngs[e].lat, item.latlngs[e].lng];
+		// 	setTimeout(function(){
+		// 		distanceBeetween(lastCoordinate, 'finish');
+		// 	}, 3000);
+		// }
 
 		routesArr.push(item.latlngs[e]);
 	}
 	var rend = {}
 	rend.latlngs = routesArr;
-	addRoutes(rend);
+
+	var round = item.round;
+	
+	addRoutes(rend, round);
+	setTimeout(function(){
+		beforeFinish(routesArr, item.length);
+	}, 2000);
 }
 $.getJSON( "json/routes.json", function( data ) {
 	showRoutes(data);
 	getRoutes(data);
 });
 
-function distanceBeetween(first, type) {
-	if(!first) var first = [73.434314, 61.248798]; // начало
-	try {
-		var second = ol.proj.transform([geolocation.getPosition()[0], geolocation.getPosition()[1]], 'EPSG:3857', 'EPSG:4326');
-	} catch(e){
-		console.log("Мудрые говорят, что дистанция 'undefined' из-за того, что геолокация отключена...");
-		console.log("Пожалуйста, включите геолокацию.");
-	}
+function analyzingRoute(){
+	setInterval(function(){
+		$.getJSON( "json/routes.json", function( data ) {
+			getRoutes(data);
+		});
+	}, 7000);
+}
+function beforeFinish(routesArr, routeLength){
 
-	var sphereA = new ol.Sphere(6378137);
-	var distance = sphereA.haversineDistance(second,first);
-	var normalDis = (distance/1000);
-	// var normalDis = normalDis.replace('.', ',');
+	for(var i=0; i<routesArr.length; i=i+50){
+		var first = ol.proj.transform([routesArr[i].lng, routesArr[i].lat], 'EPSG:3857', 'EPSG:4326');
+		try {
+			var second = ol.proj.transform([geolocation.getPosition()[0], geolocation.getPosition()[1]], 'EPSG:3857', 'EPSG:4326');
+		} catch(e){
+			console.log("Пожалуйста, включите геолокацию.");
+		}
 
-	if(!type) type = 'start';
-	switch(type){
-		case 'start':
-			distanceLeft(normalDis);
-		break;
-		case 'finish':
-			distanceToFinish(normalDis);
-		break;
+		var sphereA = new ol.Sphere(6378137);
+		var distance = sphereA.haversineDistance(second,first);
+
+		// if(distance < 100){ // И если Вам дико повезло, что вы оказались в ста метрах от данной точки
+			var result = i / routesArr.length; // Узнаем же теперь, какую чать маршрута вы прошли
+			var result2 = result * routeLength; // Находим эту часть от всего маршрута
+			var finalResult = routeLength - result2;  // Находим часть которую Вам осталось пройти.
+			var finalResult = finalResult.toString().replace('.', ',');
+			
+			$("#finish").html(finalResult);
+		// }
 	}
 }
+
+// function distanceBeetween(first, type) {
+// 	if(!first) var first = [73.434314, 61.248798]; // начало
+// 	try {
+// 		var second = ol.proj.transform([geolocation.getPosition()[0], geolocation.getPosition()[1]], 'EPSG:3857', 'EPSG:4326');
+// 	} catch(e){
+// 		console.log("Пожалуйста, включите геолокацию.");
+// 	}
+
+// 	var sphereA = new ol.Sphere(6378137);
+// 	var distance = sphereA.haversineDistance(second,first);
+// 	var normalDis = (distance/1000);
+// 	// var normalDis = normalDis.replace('.', ',');
+
+// 	if(!type) type = 'start';
+// 	switch(type){
+// 		case 'start':
+// 			distanceLeft(normalDis);
+// 		break;
+// 		case 'finish':
+// 			distanceToFinish(normalDis);
+// 		break;
+// 	}
+// }
 
 // TO HTML
-function distanceLeft(distance){
-	if(distance > 1000){
-		distance = (distance / 1000).toFixed(1).replace('.', ',').toString()+' км';
-	} else if(distance < 1000){
-		distance += ' м';
-	}
-	console.log(distance);
-	$("#left").html(distance);
+// function distanceLeft(distance){
+// 	if(distance > 1000){
+// 		distance = (distance / 1000).toFixed(1).replace('.', ',').toString();
+// 	} else if(distance < 1000){
+// 		distance += ' м';
+// 	}
+// 	$("#left").html(distance);
 
-	if(distance < 50){
-		route();
-	}
-}
-function distanceToFinish(distance){
-	if(distance > 1000){
-		hdistance = (distance / 1000).toFixed(1).replace('.', ',').toString()+' км';
-		if(distance > 1000000){
-			hdistance = '<div style="font-size: 25px">'+ hdistance + '</div>';
-		}
-	} else if(distance < 1000){
-		hdistance = distance + ' м';
-	}
-	console.log(distance);
-	$("#finish").html(hdistance);
-	if(distance < 50){
-		finish();
-	}
-}
+// 	if(distance < 50){
+// 		route();
+// 	}
+// }
+// function distanceToFinish(distance){
+// 	if(distance > 1000){
+// 		hdistance = (distance / 1000).toFixed(1).replace('.', ',').toString();
+// 		if(distance > 1000000){
+// 			hdistance = '<div style="font-size: 25px">'+ hdistance + '</div>';
+// 		}
+// 	} else if(distance < 1000){
+// 		hdistance = distance + ' м';
+// 	}
+// 	$("#finish").html(hdistance);
+// 	if(distance < 50){
+// 		finish();
+// 	}
+// }
 
 var countLineRoutes = 0;
 var vectorLayerLineFirst = new ol.layer.Vector({});
 
-function addRoutes(coord) {
+function addRoutes(coord, round) {
 	if (countLineRoutes == 0) {
 		var comp = new Array();
 
@@ -374,12 +408,6 @@ function addRoutes(coord) {
 		map.addLayer(vectorLayerLineFirst);
 		countLineRoutes++;
 
-
-
-
-		// Delete previous markers
-		map.removeLayer(bLayer);
-		map.removeLayer(aLayer);
 		// Add start/finish markers.
 
 		var aSource = new ol.source.Vector({});//create empty vector
@@ -399,6 +427,17 @@ function addRoutes(coord) {
 
 
 		// Start marker
+		var abStyle = new ol.style.Style({
+			image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+				anchor: [0.5, 46],
+				anchorXUnits: 'fraction',
+				anchorYUnits: 'pixels',
+				opacity: 1,
+				scale: 0.9,
+				src: 'img/AB.png'
+			}))
+		});
+
 		var aStyle = new ol.style.Style({
 			image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
 				anchor: [0.5, 46],
@@ -425,21 +464,32 @@ function addRoutes(coord) {
 
 
 		//add the feature vector to the layer vector, and apply a style to whole layer
-		var aLayer = new ol.layer.Vector({
+		aLayer = new ol.layer.Vector({
 			source: aSource,
 			style: aStyle
 		});
-		var bLayer = new ol.layer.Vector({
+		bLayer = new ol.layer.Vector({
 			source: bSource,
 			style: bStyle
 		});
-
-		map.addLayer(bLayer);
-		map.addLayer(aLayer);
+		abLayer = new ol.layer.Vector({
+			source: aSource,
+			style: abStyle
+		});
+		if(round == 1){
+			map.addLayer(abLayer);
+		} else {
+			map.addLayer(bLayer);
+			map.addLayer(aLayer);
+		}
+		
 	}
 }
 function delRoutes() {
 	map.removeLayer(vectorLayerLineFirst);
+	map.removeLayer(aLayer);
+	map.removeLayer(bLayer);
+	map.removeLayer(abLayer);
 	countLineRoutes = 0;
 }
 
@@ -449,12 +499,10 @@ setTimeout(function(){
 		$('.fotorama').on('fotorama:showend ',function (e, fotorama) {
 			var frameNumb = fotorama.activeIndex;
 			console.log(frameNumb);
-			if(frameNumb != 0){
-				$.getJSON('json/routes.json', function(data){
-					delRoutes();
-					getRoutes(data, frameNumb);
-				});
-			}
+			$.getJSON('json/routes.json', function(data){
+				delRoutes();
+				getRoutes(data, frameNumb);
+			});
 		}).fotorama();
 	});
 }, 800);
@@ -469,10 +517,6 @@ function heat() {
 	$('#kntdr').attr('class', 'short');
 };
 
-$('.notice button').click(function() {
-	$('.notice').fadeOut(200);
-	$('#blur').removeClass('notice-shown');
-});
 
 // parse json and show ALL routes
 function showRoutes(data){
@@ -520,23 +564,38 @@ function start(params) {
 	$('.start, .list').hide();
 	$('#kntdr').attr('class', 'long');
 	startTimer();
+	analyzingRoute();
 };
 
 function finish(type) {
+	console.log("Type "+ type);
 	// type = { 1: 'success', 0: 'fail'}
-	if(!type) type = 1;
 	if(type == 0){
-		alert("Сдулся слабак");
+		$("#finish-message").html("Увы");
+
+		
+
 	}
+	var finishTime = $("#timer").html();
+	$("#finish-time").html(finishTime);
+
 	$('.route').hide();
-	$('.finish').show();
-	$('.finish').addClass(routeKind);
+	$('.finish').show().addClass(routeKind);
+
 	$('h1, h2, h4').removeClass('sick');
 };
 
 heat();
 
 // $('.start').click(route());
+$('#fail-finish').click(function(){
+	finish(0);
+});
+
+$('.notice button').click(function() {
+	$('.notice').fadeOut(200);
+	$('#blur').removeClass('notice-shown');
+});
 
 $('.share').click(function() {
     window.plugins.socialsharing.share('Проехал 0 км за 1:03 не без помощи Контадора!', null, null, 'http://kntdr.ru')

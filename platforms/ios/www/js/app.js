@@ -376,20 +376,30 @@ function addRoutes(coord) {
 
 
 
+
+		// Delete previous markers
+		map.removeLayer(bLayer);
+		map.removeLayer(aLayer);
 		// Add start/finish markers.
-		var vectorSource = new ol.source.Vector({
-			//create empty vector
+
+		var aSource = new ol.source.Vector({});//create empty vector
+		var bSource = new ol.source.Vector({});
+
+		var aPoint = new ol.Feature({geometry: new  
+			ol.geom.Point(ol.proj.transform([coord.latlngs[1].lng, coord.latlngs[1].lat], 'EPSG:4326', 'EPSG:3857'))
 		});
-		var iconFeature = new ol.Feature({geometry: new  
-			ol.geom.Point(ol.proj.transform([73.3964, 61.254], 'EPSG:4326', 'EPSG:3857')),
-			name: 'Null Island ' + i,
-			population: 4000,
-			rainfall: 500
+
+		var bPoint = new ol.Feature({geometry: new
+			ol.geom.Point(ol.proj.transform([coord.latlngs[coord.latlngs.length - 1].lng, coord.latlngs[coord.latlngs.length - 1].lat], 'EPSG:4326', 'EPSG:3857')),
 		});
-		vectorSource.addFeature(iconFeature);
+		aSource.addFeature(aPoint);
+		bSource.addFeature(bPoint);
 
 		//create the style
-		var iconStyle = new ol.style.Style({
+
+
+		// Start marker
+		var aStyle = new ol.style.Style({
 			image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
 				anchor: [0.5, 46],
 				anchorXUnits: 'fraction',
@@ -400,15 +410,32 @@ function addRoutes(coord) {
 			}))
 		});
 
+		// Finish marker
+		var bStyle = new ol.style.Style({
+			image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+				anchor: [0.5, 46],
+				anchorXUnits: 'fraction',
+				anchorYUnits: 'pixels',
+				opacity: 1,
+				scale: 0.9,
+				src: 'img/B.png'
+			}))
+		});
+
 
 
 		//add the feature vector to the layer vector, and apply a style to whole layer
-		var vectorLayer = new ol.layer.Vector({
-			source: vectorSource,
-			style: iconStyle
+		var aLayer = new ol.layer.Vector({
+			source: aSource,
+			style: aStyle
+		});
+		var bLayer = new ol.layer.Vector({
+			source: bSource,
+			style: bStyle
 		});
 
-		map.addLayer(vectorLayer);
+		map.addLayer(bLayer);
+		map.addLayer(aLayer);
 	}
 }
 function delRoutes() {
