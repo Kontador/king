@@ -80,10 +80,10 @@ body {
     -webkit-font-smoothing: antialiased;
     -webkit-font-feature-settings: "mnum";
 }
-
+/*
 canvas {
     -webkit-filter: saturate(0.6);
-}
+}*/
 
 .dist h1, .safety button, .dist button, .start.dist *, .dist .share path {
     color: #ff4e00;

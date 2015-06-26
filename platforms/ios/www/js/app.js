@@ -385,7 +385,7 @@ function addRoutes(coord) {
 		var aSource = new ol.source.Vector({});//create empty vector
 		var bSource = new ol.source.Vector({});
 
-		var aPoint = new ol.Feature({geometry: new  
+		var aPoint = new ol.Feature({geometry: new
 			ol.geom.Point(ol.proj.transform([coord.latlngs[1].lng, coord.latlngs[1].lat], 'EPSG:4326', 'EPSG:3857'))
 		});
 
